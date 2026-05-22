@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>IELTS Studio | Essays, Readings & Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #eef2f5;
+      color: #1f2a3e;
+    }
+
+    /* modern calm colors: deep slate, soft sand, warm accent */
+    :root {
+      --deep: #1e2f41;
+      --sand: #f9f6f0;
+      --clay: #c17b4c;
+      --clay-light: #e7d6ca;
+      --gray-mist: #dce3e9;
+    }
+
+    /* landing hero section */
+    .hero-full {
+      min-height: 85vh;
+      background: linear-gradient(125deg, #1e2f41 0%, #2c4359 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      border-radius: 0 0 48px 48px;
+      margin-bottom: 3rem;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    }
+
+    .hero-content h1 {
+      font-size: 4.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #FFE6C7, #FFB47B);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+      color: #cddfe7;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .enter-btn {
+      background: #c17b4c;
+      border: none;
+      margin-top: 2rem;
+      padding: 14px 38px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 60px;
+      color: white;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+
+    .enter-btn:hover {
+      background: #d68f5f;
+      transform: translateY(-2px);
+    }
+
+    /* main app panel (hidden until entrance) */
+    .app-dashboard {
+      display: none;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 2rem 3rem;
+    }
+
+    /* top navbar */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--gray-mist);
+      padding-bottom: 0.8rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 28px;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 40px;
+      color: #2c4c6c;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: var(--clay);
+      color: white;
+      box-shadow: 0 4px 10px rgba(193,123,76,0.25);
+    }
+
+    /* cards & sections */
+    .section {
+      animation: fadeSlide 0.3s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    .grid-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .card-item {
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.04);
+      overflow: hidden;
+      border: 1px solid #e4eef3;
+      transition: 0.2s;
+    }
+
+    .card-header {
+      background: var(--sand);
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid #e2dcd2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1e3a4d;
+    }
+
+    .rating-badge {
+      background: #e7cfbe;
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #8b5a36;
+    }
+
+    .card-body {
+      padding: 1.6rem 1.8rem;
+    }
+
+    .sample-text {
+      background: #fefaf5;
+      padding: 1rem;
+      border-radius: 20px;
+      border-left: 5px solid var(--clay);
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+
+    /* comments / ratings area */
+    .comment-section {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 2px dashed #e2cfbb;
+    }
+
+    .comment-item {
+      background: #faf7f2;
+      padding: 14px;
+      border-radius: 24px;
+      margin-bottom: 12px;
+    }
+
+    .comment-meta {
+      font-size: 0.7rem;
+      color: #b68b60;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .rating-stars {
+      display: inline-flex;
+      gap: 4px;
+      margin-left: 12px;
+      font-size: 0.8rem;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 28px;
+      border: 1.5px solid #dfd3c5;
+      background: white;
+      margin: 8px 0 12px;
+      font-size: 0.9rem;
+    }
+
+    button {
+      background: var(--clay);
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-top: 4px;
+    }
+
+    button.outline-light {
+      background: #e9e4dc;
+      color: #5c4431;
+    }
+
+    .delete-btn {
+      background: #b45f3b;
+    }
+
+    /* file reading cards */
+    .file-card {
+      background: #fef7f0;
+      border-radius: 28px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .file-link {
+      background: white;
+      padding: 6px 16px;
+      border-radius: 40px;
+      text-decoration: none;
+      color: var(--clay);
+      font-weight: 500;
+      border: 1px solid #e2cfbb;
+    }
+
+    .add-form {
+      background: #ffffffdd;
+      border-radius: 32px;
+      padding: 20px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+
+    hr {
+      margin: 16px 0;
+    }
+
+    /* report & details footer */
+    .info-footer {
+      margin-top: 60px;
+      background: var(--sand);
+      border-radius: 32px;
+      padding: 24px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      border: 1px solid #ddd2c4;
+    }
+
+    .contact-block a {
+      color: var(--clay);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 700px) {
+      .hero-content h1 { font-size: 2.4rem; }
+      .app-dashboard { padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LANDING / YOUR JOURNEY STARTS HERE -->
+<div id="landingHero" class="hero-full">
+  <div class="hero-content">
+    <h1>✨ Your journey starts here</h1>
+    <p>Curated IELTS essays · reading vault · writing challenges with community feedback</p>
+    <button class="enter-btn" id="enterDashboardBtn">Enter the studio →</button>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="dashboardApp" class="app-dashboard">
+  <div class="top-nav">
+    <button class="nav-btn active" data-nav="writings">📝 My Writings & Samples</button>
+    <button class="nav-btn" data-nav="readings">📚 Reading File Hub</button>
+    <button class="nav-btn" data-nav="questions">✍️ Writing Questions (practice)</button>
+  </div>
+
+  <!-- WRITINGS SECTION (my essays with ratings + comments) -->
+  <div id="writingsSection" class="section">
+    <div class="add-form">
+      <h3>➕ Add your IELTS essay + rating</h3>
+      <input type="text" id="essayTitleInput" placeholder="Essay question / prompt">
+      <input type="text" id="essayRatingInput" placeholder="Your rating (e.g. 8.0 / 9)">
+      <textarea id="essayBodyInput" rows="3" placeholder="Write your full sample essay..."></textarea>
+      <button id="submitEssayBtn">Publish essay</button>
+    </div>
+    <div id="essaysContainer" class="grid-panel"></div>
+  </div>
+
+  <!-- READINGS SECTION -->
+  <div id="readingsSection" class="section" style="display: none;">
+    <div class="add-form">
+      <h3>📎 Upload reading file (PDF, DOC, TXT, image)</h3>
+      <input type="file" id="readingFileUpload" accept=".pdf,.txt,.doc,.docx,.jpg,.png,.jpeg">
+      <input type="text" id="readingTitleInput" placeholder="Reading title (e.g. 'The Arctic - Cambridge 17')">
+      <button id="uploadReadingBtn">Upload & share</button>
+      <p style="font-size:12px; margin-top:6px;">* Files stored locally, visible for everyone on this page</p>
+    </div>
+    <div id="readingsContainer" class="grid-panel"></div>
+  </div>
+
+  <!-- WRITING QUESTIONS SECTION (users practice) -->
+  <div id="questionsSection" class="section" style="display: none;">
+    <div class="add-form">
+      <h3>🎯 Create a writing task for others</h3>
+      <input type="text" id="newQuestionInput" placeholder="e.g. 'Some people think that... Do you agree?'">
+      <button id="addQuestionBtn">Add question</button>
+    </div>
+    <div id="questionsContainer" class="grid-panel"></div>
+  </div>
+
+  <!-- FOOTER: REPORT PROBLEMS & CONTEXT DETAILS -->
+  <div class="info-footer">
+    <div class="contact-block">
+      <strong>📬 Report any issue / feedback</strong><br>
+      <a href="mailto:hamidyulchiev6@gmail.com">hamidyulchiev6@gmail.com</a>
+      <span style="display:inline-block; margin-left:12px;">⚡ 24h response</span>
+    </div>
+    <div>
+      <strong>🧑‍🎓 My context details</strong><br>
+      <span style="font-size:0.85rem;">IELTS mentor & content curator — all samples are original band 7.5+ <br> Feel free to comment & rate my work.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- STORAGE KEYS ----------
+  const STORAGE_ESSAYS = 'ielts_essays_rating_comments';
+  const STORAGE_READINGS = 'ielts_readings_files';
+  const STORAGE_QUESTIONS = 'ielts_writing_questions';
+
+  // Data models
+  let essays = [];      // { id, title, rating, body, comments: [{ id, author, text, ratingScore, timestamp }] }
+  let readings = [];    // { id, title, fileDataUrl, fileName, fileType, timestamp }
+  let writingQuestions = []; // { id, questionText, userAnswers: [{ id, author, answerText, timestamp, ratingGiven }] }
+
+  // Load data from localStorage
+  function loadAllData() {
+    const storedEssays = localStorage.getItem(STORAGE_ESSAYS);
+    if(storedEssays) {
+      essays = JSON.parse(storedEssays);
+      essays = essays.map(e => ({ ...e, comments: e.comments || [] }));
+    } else {
+      essays = []; // no fake comments, completely empty
+    }
+
+    const storedReadings = localStorage.getItem(STORAGE_READINGS);
+    if(storedReadings) readings = JSON.parse(storedReadings);
+    else readings = [];
+
+    const storedQuestions = localStorage.getItem(STORAGE_QUESTIONS);
+    if(storedQuestions) {
+      writingQuestions = JSON.parse(storedQuestions);
+      writingQuestions = writingQuestions.map(q => ({ ...q, userAnswers: q.userAnswers || [] }));
+    } else {
+      writingQuestions = [];
+    }
+  }
+
+  function saveEssays() { localStorage.setItem(STORAGE_ESSAYS, JSON.stringify(essays)); }
+  function saveReadings() { localStorage.setItem(STORAGE_READINGS, JSON.stringify(readings)); }
+  function saveQuestions() { localStorage.setItem(STORAGE_QUESTIONS, JSON.stringify(writingQuestions)); }
+
+  // Helpers
+  function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ---------- RENDER ESSAYS (with rating & comments from users) ----------
+  function renderEssays() {
+    const container = document.getElementById('essaysContainer');
+    if(!container) return;
+    if(essays.length === 0) {
+      container.innerHTML = `<div style="background:#f9f3ec; border-radius:48px; padding:40px; text-align:center;">✨ No essays yet. Use the form above to share your first IELTS sample + rating.</div>`;
+      return;
+    }
+    container.innerHTML = '';
+    essays.forEach((essay, idx) => {
+      const card = document.createElement('div');
+      card.className = 'card-item';
+      card.setAttribute('data-id', essay.id);
+      
+      let commentsHtml = `<div class="comment-section"><strong>💬 People’s comments & ratings on my essay (${essay.comments.length})</strong>`;
+      if(essay.comments.length === 0) commentsHtml += `<p style="color:#a4815e; margin-top:10px;">No comments yet — be the first to rate my work.</p>`;
+      else {
+        essay.comments.forEach(c => {
+          const stars = c.ratingScore ? '⭐'.repeat(c.ratingScore) : '✍️';
+          commentsHtml += `
+            <div class="comment-item">
+              <div class="comment-meta"><span>👤 ${escapeHtml(c.author || 'Anonymous')}</span><span class="rating-stars">${stars} ${c.ratingScore ? `(${c.ratingScore}/5)` : ''}</span><span>${new Date(c.timestamp).toLocaleString()}</span></div>
+              <div>${escapeHtml(c.text)}</div>
+            </div>
+          `;
+        });
+      }
+      // add new comment form
+      commentsHtml += `
+        <div style="margin-top: 1rem;">
+          <input type="text" id="commentName-${essay.id}" placeholder="Your name (optional)" style="margin-bottom:6px;">
+          <select id="commentRating-${essay.id}" style="padding:8px; border-radius:30px; margin-right:8px;">
+            <option value="5">★★★★★ 5/5</option>
+            <option value="4">★★★★☆ 4/5</option>
+            <option value="3">★★★☆☆ 3/5</option>
+            <option value="2">★★☆☆☆ 2/5</option>
+            <option value="1">★☆☆☆☆ 1/5</option>
+          </select>
+          <textarea id="commentText-${essay.id}" rows="2" placeholder="Rate my essay & leave feedback..."></textarea>
+          <button class="outline-light submit-comment" data-id="${essay.id}">⭐ Post comment & rating</button>
+        </div>
+      </div>`;
+
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="card-title">📌 ${escapeHtml(essay.title)}</div>
+          <div class="rating-badge">🏆 My IELTS rating: ${escapeHtml(essay.rating)}</div>
+        </div>
+        <div class="card-body">
+          <div class="sample-text">${escapeHtml(essay.body)}</div>
+          ${commentsHtml}
+          <div style="margin-top:20px; text-align:right;">
+            <button class="delete-btn delete-essay" data-id="${essay.id}">🗑 Remove essay</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    // attach comment events
+    document.querySelectorAll('.submit-comment').forEach(btn => {
+      btn.removeEventListener('click', handleAddComment);
+      btn.addEventListener('click', handleAddComment);
+    });
+    document.querySelectorAll('.delete-essay').forEach(btn => {
+      btn.removeEventListener('click', handleDeleteEssay);
+      btn.addEventListener('click', handleDeleteEssay);
+    });
+  }
+
+  function handleAddComment(e) {
+    const essayId = e.currentTarget.getAttribute('data-id');
+    const nameInput = document.getElementById(`commentName-${essayId}`);
+    const ratingSelect = document.getElementById(`commentRating-${essayId}`);
+    const textarea = document.getElementById(`commentText-${essayId}`);
+    const author = nameInput?.value.trim() || 'Reader';
+    const ratingScore = parseInt(ratingSelect?.value, 10);
+    const commentText = textarea?.value.trim();
+    if(!commentText) { alert('Please write a comment before posting.'); return; }
+    const essayIndex = essays.findIndex(e => e.id === essayId);
+    if(essayIndex === -1) return;
+    const newComment = {
+      id: Date.now() + Math.random(),
+      author: author,
+      text: commentText,
+      ratingScore: ratingScore,
+      timestamp: Date.now()
+    };
+    essays[essayIndex].comments = essays[essayIndex].comments || [];
+    essays[essayIndex].comments.unshift(newComment);
+    saveEssays();
+    renderEssays();
+    if(textarea) textarea.value = '';
+    if(nameInput) nameInput.value = '';
+  }
+
+  function handleDeleteEssay(e) {
+    const id = e.currentTarget.getAttribute('data-id');
+    if(confirm('Delete this essay + all comments permanently?')) {
+      essays = essays.filter(ess => ess.id !== id);
+      saveEssays();
+      renderEssays();
+    }
+  }
+
+  function addNewEssay() {
+    const title = document.getElementById('essayTitleInput').value.trim();
+    const rating = document.getElementById('essayRatingInput').value.trim();
+    const body = document.getElementById('essayBodyInput').value.trim();
+    if(!title || !body) { alert('Please add both question/prompt and essay text'); return; }
+    const newEssay = {
+      id: Date.now() + '' + Math.random(),
+      title: title,
+      rating: rating || 'Pending',
+      body: body,
+      comments: []
+    };
+    essays.unshift(newEssay);
+    saveEssays();
+    renderEssays();
+    document.getElementById('essayTitleInput').value = '';
+    document.getElementById('essayRatingInput').value = '';
+    document.getElementById('essayBodyInput').value = '';
+  }
+
+  // ---------- READINGS ----------
+  function renderReadings() {
+    const container = document.getElementById('readingsContainer');
+    if(!container) return;
+    if(readings.length === 0) {
+      container.innerHTML = `<div style="background:#f9f3ec; border-radius:48px; padding:40px; text-align:center;">📭 No reading files yet. Upload PDFs, docs, images for learners.</div>`;
+      return;
+    }
+    container.innerHTML = '';
+    readings.forEach(file => {
+      const div = document.createElement('div');
+      div.className = 'file-card';
+      div.innerHTML = `
+        <div><strong>📄 ${escapeHtml(file.title)}</strong><br><span style="font-size:12px;">${file.fileName || 'document'} • ${new Date(file.timestamp).toLocaleString()}</span></div>
+        <div>
+          <a class="file-link" href="${file.fileDataUrl}" download="${escapeHtml(file.fileName)}" target="_blank">⬇️ Open / Download</a>
+          <button class="delete-btn delete-reading-file" data-id="${file.id}" style="background:#bc6f48;">🗑 Remove</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+    document.querySelectorAll('.delete-reading-file').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = btn.getAttribute('data-id');
+        if(confirm('Remove this reading file?')) {
+          readings = readings.filter(r => r.id !== id);
+          saveReadings();
+          renderReadings();
+        }
+      });
+    });
+  }
+
+  function uploadReading() {
+    const fileInput = document.getElementById('readingFileUpload');
+    const title = document.getElementById('readingTitleInput').value.trim();
+    if(!fileInput.files.length) { alert('Select a file'); return; }
+    if(!title) { alert('Add a title'); return; }
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const newFile = {
+        id: Date.now() + '-' + Math.random(),
+        title: title,
+        fileName: file.name,
+        fileType: file.type,
+        fileDataUrl: ev.target.result,
+        timestamp: Date.now()
+      };
+      readings.unshift(newFile);
+      saveReadings();
+      renderReadings();
+      fileInput.value = '';
+      document.getElementById('readingTitleInput').value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ---------- WRITING QUESTIONS SECTION (users practice and comment) ----------
+  function renderWritingQuestions() {
+    const container = document.getElementById('questionsContainer');
+    if(!container) return;
+    if(writingQuestions.length === 0) {
+      container.innerHTML = `<div style="background:#f9f3ec; border-radius:48px; padding:40px; text-align:center;">✍️ No writing tasks yet. Create a question for others to practice.</div>`;
+      return;
+    }
+    container.innerHTML = '';
+    writingQuestions.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'card-item';
+      let answersHtml = `<div class="comment-section"><strong>📝 Users' sample answers (${q.userAnswers.length})</strong>`;
+      if(q.userAnswers.length === 0) answersHtml += `<p style="color:#a4815e;">No answers yet. Invite learners to write.</p>`;
+      else {
+        q.userAnswers.forEach(ans => {
+          answersHtml += `
+            <div class="comment-item">
+              <div class="comment-meta"><span>✍️ ${escapeHtml(ans.author)}</span><span>⭐ ${ans.ratingGiven ? ans.ratingGiven + '/5' : 'unrated'}</span><span>${new Date(ans.timestamp).toLocaleString()}</span></div>
+              <div style="white-space: pre-wrap;">${escapeHtml(ans.answerText)}</div>
+            </div>
+          `;
+        });
+      }
+      answersHtml += `
+        <div style="margin-top:16px;">
+          <input type="text" id="ansName-${q.id}" placeholder="Your name" style="margin-bottom:6px;">
+          <select id="ansRating-${q.id}" style="padding:6px; border-radius:30px;">
+            <option value="5">Rate yourself 5/5</option><option value="4">4/5</option><option value="3">3/5</option><option value="2">2/5</option><option value="1">1/5</option>
+          </select>
+          <textarea id="ansText-${q.id}" rows="3" placeholder="Write your answer / essay..."></textarea>
+          <button class="outline-light submit-answer" data-id="${q.id}">📨 Submit your answer</button>
+        </div>
+      </div>`;
+
+      card.innerHTML = `
+        <div class="card-header">
+          <div class="card-title">💭 ${escapeHtml(q.questionText)}</div>
+          <div class="rating-badge">💡 practice task</div>
+        </div>
+        <div class="card-body">
+          ${answersHtml}
+          <div style="margin-top:16px; text-align:right;">
+            <button class="delete-btn delete-question" data-id="${q.id}">🗑 Remove question</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    document.querySelectorAll('.submit-answer').forEach(btn => {
+      btn.removeEventListener('click', handleAnswerSubmit);
+      btn.addEventListener('click', handleAnswerSubmit);
+    });
+    document.querySelectorAll('.delete-question').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = btn.getAttribute('data-id');
+        if(confirm('Delete this writing question and all answers?')) {
+          writingQuestions = writingQuestions.filter(q => q.id !== id);
+          saveQuestions();
+          renderWritingQuestions();
+        }
+      });
+    });
+  }
+
+  function handleAnswerSubmit(e) {
+    const qId = e.currentTarget.getAttribute('data-id');
+    const nameField = document.getElementById(`ansName-${qId}`);
+    const ratingField = document.getElementById(`ansRating-${qId}`);
+    const answerField = document.getElementById(`ansText-${qId}`);
+    const author = nameField?.value.trim() || 'Anonymous';
+    const ratingGiven = parseInt(ratingField?.value, 10);
+    const answerText = answerField?.value.trim();
+    if(!answerText) { alert('Write your answer before submitting.'); return; }
+    const qIndex = writingQuestions.findIndex(q => q.id === qId);
+    if(qIndex === -1) return;
+    const newAnswer = {
+      id: Date.now() + '' + Math.random(),
+      author: author,
+      answerText: answerText,
+      ratingGiven: ratingGiven,
+      timestamp: Date.now()
+    };
+    writingQuestions[qIndex].userAnswers = writingQuestions[qIndex].userAnswers || [];
+    writingQuestions[qIndex].userAnswers.unshift(newAnswer);
+    saveQuestions();
+    renderWritingQuestions();
+    if(answerField) answerField.value = '';
+    if(nameField) nameField.value = '';
+  }
+
+  function addNewQuestion() {
+    const questionText = document.getElementById('newQuestionInput').value.trim();
+    if(!questionText) { alert('Please type a writing task question'); return; }
+    const newQ = {
+      id: Date.now() + '' + Math.random(),
+      questionText: questionText,
+      userAnswers: []
+    };
+    writingQuestions.unshift(newQ);
+    saveQuestions();
+    renderWritingQuestions();
+    document.getElementById('newQuestionInput').value = '';
+  }
+
+  // navigation & entrance transition
+  function showLanding(show) {
+    document.getElementById('landingHero').style.display = show ? 'flex' : 'none';
+    document.getElementById('dashboardApp').style.display = show ? 'none' : 'block';
+  }
+
+  function initDashboard() {
+    loadAllData();
+    renderEssays();
+    renderReadings();
+    renderWritingQuestions();
+    // set active nav writings
+    switchNav('writings');
+  }
+
+  function switchNav(sectionId) {
+    document.getElementById('writingsSection').style.display = sectionId === 'writings' ? 'block' : 'none';
+    document.getElementById('readingsSection').style.display = sectionId === 'readings' ? 'block' : 'none';
+    document.getElementById('questionsSection').style.display = sectionId === 'questions' ? 'block' : 'none';
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      const val = btn.getAttribute('data-nav');
+      if((val === 'writings' && sectionId === 'writings') ||
+         (val === 'readings' && sectionId === 'readings') ||
+         (val === 'questions' && sectionId === 'questions')) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+    if(sectionId === 'writings') renderEssays();
+    if(sectionId === 'readings') renderReadings();
+    if(sectionId === 'questions') renderWritingQuestions();
+  }
+
+  document.getElementById('enterDashboardBtn')?.addEventListener('click', () => {
+    showLanding(false);
+    initDashboard();
+  });
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget.getAttribute('data-nav');
+      switchNav(target);
+    });
+  });
+  document.getElementById('submitEssayBtn')?.addEventListener('click', addNewEssay);
+  document.getElementById('uploadReadingBtn')?.addEventListener('click', uploadReading);
+  document.getElementById('addQuestionBtn')?.addEventListener('click', addNewQuestion);
+
+  // show landing at start
+  showLanding(true);
+</script>
+</body>
+</html>
